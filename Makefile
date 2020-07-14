@@ -1,28 +1,28 @@
 EXE=clutmaker
 CC=gcc
 
-CFLAGS=-std=c99 -g
+CFLAGS=-std=gnu11 -g
 
 LDFLAGS = -lm
 
 all:	main
 
-main:	main.o queue.o list.o gnuplot_i.o
-	$(CC) -o $(EXE) main.o queue.o list.o gnuplot_i.o $(LDFLAGS)
+main:	main.o command_parser.o gnuplot_i.o
+	$(CC) -o $(EXE) main.o command_parser.o gnuplot_i.o $(LDFLAGS)
 
 main.o:	main.c main.h
 	$(CC) $(CFLAGS) -c main.c
 
-queue.o:	queue.c queue.h util.h
-	$(CC) $(CFLAGS) -c queue.c
+command_parser.o: command_parser.c command_parser.h
+	$(CC) $(CFLAGS) -c command_parser.c
 
-list.o:	list.c list.h util.h
-	$(CC) $(CFLAGS) -c list.c
+gnuplot_i.o: gnuplot_i.c gnuplot_i.h
+	$(CC) $(CFLAGS) -c gnuplot_i.c
 
 .PHONY:	clean
 clean:
 	clear
-	rm clutmaker main.o
+	rm clutmaker main.o command_parser.o gnuplot_i.o output.csv output.png
 
 mem:
-	valgrind --leak-check=full ./clutmaker
+	valgrind --leak-check=full ./clutmaker x^2+x x=1:1:10
